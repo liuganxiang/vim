@@ -1,5 +1,5 @@
 " ファイル名表示
-set statusline=%t
+set statusline=%F
 " 変更チェック表示
 set statusline+=%m
 " spaceを入れる

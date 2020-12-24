@@ -8,6 +8,7 @@ set incsearch
 set ignorecase
 set smartcase
 set laststatus=2
+set relativenumber
 
 set number
 set tabstop=4 "画面上でタブ文字が占める幅
@@ -18,16 +19,48 @@ set noexpandtab
 set cursorline "under line
 set ruler
 set hlsearch
+" copy yank to clipboard
+set clipboard+=unnamed
 
 " 用gr实现gT的功能
 nnoremap gr :tabprevious<CR>
+" reload .vimrc
+nnoremap <Space>s :source $HOME/.vimrc<CR>
+nnoremap j gj
+nnoremap k gk
+nnoremap gj j
+nnoremap gk k
+" deactivate ZZ
+nnoremap ZZ <Nop>
+" deactivate ZQ
+nnoremap ZQ <Nop>
+" deactivate Q
+nnoremap Q <Nop>
 
-" for python interface in vim
-autocmd BufNewFile,BufRead *.py nnoremap <C-e> :!python3 % 
+call plug#begin('~/.vim/plugged')
+Plug 'scrooloose/nerdtree'
+Plug 'Shougo/deoplete.nvim'
+Plug 'roxma/nvim-yarp'
+Plug 'roxma/vim-hug-neovim-rpc'
+let g:deoplete#enable_at_startup = 1
 
-" Required:
-filetype plugin indent on
-syntax enable
+Plug 'deoplete-plugins/deoplete-jedi'
+Plug 'Shougo/neco-vim'
+call plug#end()
 
 " set runtimepath+=$HOME/.vim/mylib
 runtime! mylib/*.vim
+
+" for commentary.vim
+autocmd FileType c,php,javascript setlocal commentstring=//\ %s
+autocmd FileType apache,shell,py setlocal commentstring=#\ %s
+
+" bind space to Leader
+let mapleader = "\<space>"
+" mapping to ^
+nnoremap <Leader>a ^
+" mapping to $
+nnoremap <Leader>; $
+" for NERDTree
+nnoremap <Leader>n :NERDTreeToggle<CR>
+
