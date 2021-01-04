@@ -1,0 +1,80 @@
+@startuml
+
+' https://developer.yahoo.co.jp/yconnect/v2/authorization_code/
+
+' align center
+skinparam sequenceMessageAlign center
+
+actor User
+participant ClientApp
+participant YID連携
+
+group ① Discovery
+	ClientApp -> YID連携: URIとサポート機能確認
+	note right: OpenID Configuration\nEndpoint
+	YID連携 -> ClientApp: 結果
+end
+
+autonumber
+group ② ユーザ認証リクエスト(JSでログインボタン作成した場合には実装不要)
+	User -> ClientApp: 認証開始
+	activate ClientApp
+	return ブラウザを開きRedirect
+	autonumber stop
+	User --> YID連携: Redirect(client_id/redirect_uri/scope/state etc.)
+	note right: Authorization Endpoint
+	activate YID連携
+	autonumber resume
+	return ユーザ認証/同意画面を表示
+	deactivate YID連携
+
+	User -> YID連携: 認証/同意
+	activate YID連携
+	return 認可コード発行し、redirect_urlにRedirect
+	autonumber stop
+	User --> ClientApp: Redirect(Authorization Code)
+	note right: redirect_url
+	activate ClientApp
+end
+
+group ③ Access Token 要求
+	autonumber resume
+	ClientApp -> YID連携: リクエスト(Authorization Code\n/client_id/redirect_uri etc.)
+	note right: Token Endpoint
+	activate YID連携
+	return レスポンス\n(Access Token\nRefresh Token\nID Token)
+end
+
+group ④ ID Token 検証
+	ClientApp -> YID連携: リクエスト
+	activate YID連携
+	note right:JWKs Endpoint\nor\nPublic Keys Endpoint
+	return レスポンス(Key/ID Token)
+	ClientApp -> ClientApp: 検証
+end
+
+create YJ_WebAPI
+group ⑤ WebAPIアクセス
+	ClientApp -> YJ_WebAPI: リクエスト(Access Token)
+	activate YJ_WebAPI
+	return レスポンス
+	ClientApp --> User: 画面表示
+	deactivate ClientApp
+end
+
+group ⑥ Access Token 更新
+	ClientApp --> YID連携: リクエスト(Refresh Token)
+	note right: Token Endpoint
+	activate YID連携
+	return レスポンス(Access Token)
+end
+
+note over User, YJ_WebAPI #CCFFFF
+	Authorization Code : 認可コード
+	Access Token: APIアクセス用トークン
+	Refresh Token: Access Token更新用トークン
+	ID Token: ユーザ認証用署名付きトークン
+	Key: ID TokenのSignatureを検証するためのmodulus/exponentまたはPublic Key
+end note
+
+@enduml
