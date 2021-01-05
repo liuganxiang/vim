@@ -38,7 +38,7 @@ nnoremap ZQ <Nop>
 nnoremap Q <Nop>
 
 call plug#begin('~/.vim/plugged')
-Plug 'scrooloose/nerdtree'
+" Plug 'scrooloose/nerdtree'
 Plug 'Shougo/deoplete.nvim'
 Plug 'roxma/nvim-yarp'
 Plug 'roxma/vim-hug-neovim-rpc'
@@ -56,7 +56,7 @@ autocmd FileType c,php,javascript setlocal commentstring=//\ %s
 autocmd FileType apache,shell,py setlocal commentstring=#\ %s
 " for plantuml
 " https://qiita.com/taishinagasaki/items/bba5868c9a41a9e1cd97
-au FileType plantuml command! OpenUml :!open "/Applications/Google Chrome.app" --args --disable-web-security --user-data-dir="dummy" file:///Users/liu/dev/plantuml/%
+au FileType plantuml command! OpenUml :!open "/Applications/Google Chrome.app" --args --disable-web-security --user-data-dir="dummy" file:///Users/ganxiang/dev/plantuml/%
 
 " bind space to Leader
 let mapleader = "\<space>"
@@ -64,8 +64,27 @@ let mapleader = "\<space>"
 nnoremap <Leader>a ^
 " mapping to $
 nnoremap <Leader>; $
-" for NERDTree
-nnoremap <Leader>n :NERDTreeToggle<CR>
+
+" ref:https://issueoverflow.com/2019/11/22/set-vim-netrw-like-nerdtree/
+" ref:https://pc.oreda.net/software/filer/netrw
+"Netrwをtoggleする関数
+let g:NetrwIsOpen=0
+function! ToggleNetrw()
+  if g:NetrwIsOpen
+    let i = bufnr("$")
+    while (i >= 1)
+      if (getbufvar(i, "&filetype") == "netrw")
+        silent exe "bwipeout " . i
+      endif
+      let i-=1
+    endwhile
+    let g:NetrwIsOpen=0
+  else
+  let g:NetrwIsOpen=1
+  silent Vex
+endif
+endfunction
+nnoremap <Leader>n :call ToggleNetrw()<CR>
 
 " binary (xxd)（vim -b binary file or  *.o files etc.)
 augroup Binary
