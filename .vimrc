@@ -48,16 +48,15 @@ Plug 'deoplete-plugins/deoplete-jedi'
 Plug 'Shougo/neco-vim'
 Plug 'jiangmiao/auto-pairs'
 " Vim + PlantUML = Sequence Diagram of UML
-Plug 'aklt/plantuml-syntax'
+"Plug 'aklt/plantuml-syntax'
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
 Plug 'previm/previm'
 call plug#end()
 
 " for commentary.vim
 autocmd FileType c,php,javascript setlocal commentstring=//\ %s
 autocmd FileType apache,shell,py setlocal commentstring=#\ %s
-" for plantuml
-" https://qiita.com/taishinagasaki/items/bba5868c9a41a9e1cd97
-au FileType plantuml command! OpenUml :!open "/Applications/Google Chrome.app" --args --disable-web-security --user-data-dir="dummy" file:///Users/ganxiang/dev/plantuml/%
 
 " bind space to Leader
 let mapleader = "\<space>"
@@ -103,9 +102,12 @@ augroup END
 let g:zip_unzipcmd = "unzip"
 let g:zip_zipcmd = "zip"
 
-" https://kazuph.hateblo.jp/entry/2016/04/29/211530
-let g:previm_open_cmd = 'open -a /Applications/Safari.app'
-nnoremap <silent><Leader>p :PrevimOpen<CR>
+" Ref:https://kazuph.hateblo.jp/entry/2016/04/29/211530
+let g:previm_open_cmd = 'open -a Safari'
+nnoremap <Leader>p :PrevimOpen<CR>
+" Ref:https://howpon.com/22203
+let g:vim_markdown_folding_disabled = 1
+let g:previm_enable_realtime = 1
 
 " set runtimepath+=$HOME/.vim/mylib
 runtime! mylib/*.vim
