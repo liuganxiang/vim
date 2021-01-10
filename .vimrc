@@ -49,6 +49,7 @@ Plug 'Shougo/neco-vim'
 Plug 'jiangmiao/auto-pairs'
 " Vim + PlantUML = Sequence Diagram of UML
 Plug 'aklt/plantuml-syntax'
+Plug 'previm/previm'
 call plug#end()
 
 " for commentary.vim
@@ -101,6 +102,10 @@ augroup END
 " zip and unzip
 let g:zip_unzipcmd = "unzip"
 let g:zip_zipcmd = "zip"
+
+" https://kazuph.hateblo.jp/entry/2016/04/29/211530
+let g:previm_open_cmd = 'open -a /Applications/Safari.app'
+nnoremap <silent><Leader>p :PrevimOpen<CR>
 
 " set runtimepath+=$HOME/.vim/mylib
 runtime! mylib/*.vim
