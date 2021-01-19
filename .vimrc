@@ -19,13 +19,14 @@ set noexpandtab
 set cursorline "under line
 set ruler
 set hlsearch
-" copy yank to clipboard
-set clipboard+=unnamed
+" unnamed => yank to clipboard
+" autoselect => highlight to clipboard
+set clipboard+=unnamed,autoselect
 
 " 用gr实现gT的功能
 nnoremap gr :tabprevious<CR>
 " reload .vimrc
-nnoremap <Space>s :source $HOME/.vimrc<CR>
+nnoremap <Space>r :source $HOME/.vimrc<CR>
 nnoremap j gj
 nnoremap k gk
 nnoremap gj j
@@ -52,6 +53,7 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 Plug 'previm/previm'
+Plug 'dhruvasagar/vim-table-mode'
 call plug#end()
 
 " for commentary.vim
@@ -64,6 +66,16 @@ let mapleader = "\<space>"
 nnoremap <Leader>a ^
 " mapping to $
 nnoremap <Leader>; $
+" save
+nnoremap <Leader>s :w<CR>
+
+" Ref:https://qiita.com/nakabonne/items/84d61ae5e89e20de0157
+" latest yank to paste
+nnoremap <Leader>p "0p
+" change-in-word does not yank
+nnoremap <Leader>c "_ciw
+" delete-in-word does not yank (black hole register)
+nnoremap <Leader>d "_diw
 
 " ref:https://issueoverflow.com/2019/11/22/set-vim-netrw-like-nerdtree/
 " ref:https://pc.oreda.net/software/filer/netrw
@@ -104,7 +116,7 @@ let g:zip_zipcmd = "zip"
 
 " Ref:https://kazuph.hateblo.jp/entry/2016/04/29/211530
 let g:previm_open_cmd = 'open -a Safari'
-nnoremap <Leader>p :PrevimOpen<CR>
+nnoremap <Leader>b :PrevimOpen<CR>
 " Ref:https://howpon.com/22203
 let g:vim_markdown_folding_disabled = 1
 let g:previm_enable_realtime = 1
