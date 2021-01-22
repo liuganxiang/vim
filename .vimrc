@@ -18,6 +18,8 @@ nnoremap <Space>r :source $HOME/.vimrc<CR>
 let mapleader = "\<space>"
 " Save
 nnoremap <Leader>s :w<CR>
+" for shell alias command
+set shellcmdflag=-ic
 "}}}
 
 "-----------------------------------------------------------
