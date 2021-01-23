@@ -1,42 +1,30 @@
-" Ref:https://github.com/ssh0/dotfiles/blob/master/vimfiles/vimrc
 "-----------------------------------------------------------
 " System
 "-----------------------------------------------------------
-"{{{
 " make Vim behave in a more useful way
 set nocompatible
 filetype plugin on
-" deactivate ZZ
-nnoremap ZZ <Nop>
-" deactivate ZQ
-nnoremap ZQ <Nop>
-" deactivate Q
-nnoremap Q <Nop>
 set history=1000
 set helplang=en,cn
-nnoremap <Space>r :source $HOME/.vimrc<CR>
 let mapleader = "\<space>"
-" Save
-nnoremap <Leader>s :w<CR>
 " for shell alias command
 set shellcmdflag=-ic
-"}}}
+" <Shift>k to jump to help for the word under cursor
+set keywordprg=:help
+" disable 8-bit num
+set nrformats-=octal
+set timeout timeoutlen=500 ttimeoutlen=-1
 
 "-----------------------------------------------------------
 " Appearance
 "-----------------------------------------------------------
-"syntax on
 syntax enable
-" Show the line and column number of the cursor position
 set ruler
-" Precede each line with its line number
 set number
-set hlsearch
-set cursorline
-set pumheight=10
 set relativenumber
-set background=dark
-" Don't display the intro message when start vim
+set hlsearch
+set pumheight=10
+" Don't display the intro message when launch vim
 set shortmess+=I
 set showbreak=↳
 set wrap
@@ -44,11 +32,37 @@ set wrap
 set breakindent
 " modeline
 set modeline
+colorscheme murphy
+
+set cursorline
+set cursorcolumn
+"hi CursorLine term=underline cterm=none ctermfg=15 ctermbg=DarkGray
 
 "-----------------------------------------------------------
+" Key Bindings
+"-----------------------------------------------------------
+nnoremap <Space>s :source $HOME/.vimrc<CR>
+
+" create new tab
+nnoremap <C-n> :tabnew<Space>
+
+" deactivate ZZ
+nnoremap ZZ <Nop>
+" deactivate ZQ
+nnoremap ZQ <Nop>
+" deactivate Q
+nnoremap Q <Nop>
+
+nnoremap Y y$
+
+" Save
+"nnoremap <Leader>s :w<CR>
+
+nnoremap <ESC><ESC> :nohlsearch<CR>
+
+"-------------------
 " Folding
 " https://maku77.github.io/vim/advanced/folding.html
-"-----------------------------------------------------------
 set foldmethod=indent
 set foldlevel=3
 nnoremap fc zc
@@ -58,6 +72,83 @@ nnoremap fm zm
 nnoremap fr zr
 nnoremap fM zM
 nnoremap fR zR
+
+"-------------------
+" Translation
+" https://github.com/echuraev/translate-shell.vim
+" $ trans -b [en]:zh "Peace begins with a smile."
+nnoremap <silent> <Leader>t :Trans<CR>
+vnoremap <silent> <Leader>t :Trans<CR>
+nnoremap <silent> <Leader>tc :Trans :zh<CR>
+vnoremap <silent> <Leader>tc :Trans :zh<CR>
+
+"-------------------
+" Moving cursor
+nnoremap j gj
+nnoremap k gk
+nnoremap gj j
+nnoremap gk k
+set scrolloff=5
+nnoremap gr :tabprevious<CR>
+" to ^
+nnoremap <Leader>a ^
+" to $
+nnoremap <Leader>; $
+
+"-------------------
+" Move between windows
+nnoremap <C-k> :wincmd k<CR>
+nnoremap <C-j> :wincmd j<CR>
+nnoremap <C-h> :wincmd h<CR>
+nnoremap <C-l> :wincmd l<CR>
+
+"-------------------
+" Exchange windows position
+nnoremap <C-t>t <C-w>T
+nnoremap <C-j>j <C-w>J
+nnoremap <C-h>h <C-w>H
+nnoremap <C-l>l <C-w>L
+
+" https://qiita.com/nakabonne/items/84d61ae5e89e20de0157
+" latest yank to paste
+nnoremap <Leader>p "0p
+" change-in-word does not yank (black hole register)
+nnoremap <Leader>c "_ciw
+" delete-in-word does not yank
+nnoremap <Leader>d "_diw
+nnoremap <Leader>D "_D
+
+nnoremap <Leader>b :PrevimOpen<CR>
+
+nnoremap <silent> <Leader>hc :setlocal helplang=cn<CR>
+nnoremap <silent> <Leader>he :setlocal helplang=en<CR>
+
+" Toggle for netrw
+nnoremap <Leader>w :call ToggleNetrw()<CR>
+
+" Toggle for relative number
+nnoremap <silent> <Leader>nn :setlocal relativenumber! number!<CR>
+
+" Toggle for cursorline and cursorcolumn
+nnoremap <Leader>cc :setlocal cursorline! cursorcolumn!<CR>
+
+"-----------------------------------------------------------
+" Indent
+"-----------------------------------------------------------
+" sw=shiftwidth, sts=softtabstop,ts=tabstop,et=expandtab
+autocmd FileType sh         setlocal sw=4 sts=4 ts=4 noet
+autocmd FileType go         setlocal sw=4 sts=4 ts=4 noet
+autocmd FileType php        setlocal sw=4 sts=4 ts=4 noet
+autocmd FileType xml        setlocal sw=4 sts=4 ts=4 noet
+autocmd FileType c,c++      setlocal sw=4 sts=4 ts=4 noet
+autocmd FileType java       setlocal sw=4 sts=4 ts=4 et
+autocmd FileType vim        setlocal sw=2 sts=2 ts=2 et
+autocmd FileType sql        setlocal sw=2 sts=2 ts=2 et
+autocmd FileType ruby       setlocal sw=2 sts=2 ts=2 et
+autocmd FileType yaml       setlocal sw=2 sts=2 ts=2 et
+autocmd FileType json       setlocal sw=2 sts=2 ts=2 et
+autocmd FileType python     setlocal sw=4 sts=4 ts=4 et
+autocmd FileType javascript setlocal sw=2 sts=2 ts=2 et
 
 "-----------------------------------------------------------
 " Status line
@@ -79,7 +170,7 @@ set statusline+=%=
 set statusline+=(%l,%c)
 " insert space
 set statusline+=\ \ 
-" code under the cursor in decimal and hexadecimal format
+" code under the cursor in decimal and hex format
 set statusline+=%b\ 0x%02B
 " insert space
 set statusline+=\ \ 
@@ -126,39 +217,6 @@ set laststatus=2
 set wrapscan
 " When a bracket is inserted, jump to the matching one
 set showmatch matchtime=1
-nnoremap <ESC><ESC> :nohlsearch<CR>
-
-"-----------------------------------------------------------
-" Translation
-" Ref:https://github.com/echuraev/translate-shell.vim
-" $ trans -b -s=en -t=zh "Peace begins with a smile."
-"-----------------------------------------------------------
-nnoremap <silent> <leader>t :Trans<CR>
-vnoremap <silent> <leader>t :Trans<CR>
-nnoremap <silent> <leader>tc :Trans :zh<CR>
-vnoremap <silent> <leader>tc :Trans :zh<CR>
-
-"-----------------------------------------------------------
-" Moving cursor
-"-----------------------------------------------------------
-nnoremap j gj
-nnoremap k gk
-nnoremap gj j
-nnoremap gk k
-set scrolloff=3
-nnoremap gr :tabprevious<CR>
-" mapping to ^
-nnoremap <Leader>a ^
-" mapping to $
-nnoremap <Leader>; $
-
-"-----------------------------------------------------------
-" Exchange windows position
-"-----------------------------------------------------------
-nnoremap <C-t>t <C-w>T
-nnoremap <C-j>j <C-w>J
-nnoremap <C-h>h <C-w>H
-nnoremap <C-l>l <C-w>L
 
 "-----------------------------------------------------------
 " Finding files
@@ -184,57 +242,6 @@ let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
 " - :edit a folder to open a file browser
 " - <CR>/v/t to open in an h-split/v-split/tab
 
-"-----------------------------------------------------------
-" Tag jumping
-"-----------------------------------------------------------
-" Create the `tags` file (may need to install ctags first)
-command! MakeTags !ctags -R .
-
-"-----------------------------------------------------------
-" Editing
-"-----------------------------------------------------------
-nnoremap Y y$
-set backspace=indent,eol,start
-set clipboard&
-set clipboard^=unnamed,autoselect
-
-" Ref:https://qiita.com/nakabonne/items/84d61ae5e89e20de0157
-" latest yank to paste
-nnoremap <Leader>p "0p
-" change-in-word does not yank
-nnoremap <Leader>c "_ciw
-" delete-in-word does not yank (black hole register)
-nnoremap <Leader>d "_diw
-
-"-----------------------------------------------------------
-" PlugIns via vim-plug
-"-----------------------------------------------------------
-call plug#begin('~/.vim/plugged')
-" Plug 'scrooloose/nerdtree'
-Plug 'Shougo/deoplete.nvim'
-Plug 'roxma/nvim-yarp'
-Plug 'roxma/vim-hug-neovim-rpc'
-let g:deoplete#enable_at_startup = 1
-
-Plug 'deoplete-plugins/deoplete-jedi'
-Plug 'Shougo/neco-vim'
-Plug 'jiangmiao/auto-pairs'
-" Vim + PlantUML = Sequence Diagram of UML
-"Plug 'aklt/plantuml-syntax'
-Plug 'godlygeek/tabular'
-Plug 'plasticboy/vim-markdown'
-Plug 'previm/previm'
-Plug 'dhruvasagar/vim-table-mode'
-Plug 'echuraev/translate-shell.vim'
-" Chinese doc(https://github.com/wsdjeg/vimdoc-cn)
-Plug 'yianwillis/vimcdoc'
-call plug#end()
-
-" for commentary.vim
-autocmd FileType c,php,javascript setlocal commentstring=//\ %s
-autocmd FileType apache,shell,py setlocal commentstring=#\ %s
-
-
 " ref:https://issueoverflow.com/2019/11/22/set-vim-netrw-like-nerdtree/
 " ref:https://pc.oreda.net/software/filer/netrw
 "Netrwをtoggleする関数
@@ -254,9 +261,51 @@ function! ToggleNetrw()
   silent Vex
 endif
 endfunction
-nnoremap <Leader>n :call ToggleNetrw()<CR>
 
-" binary (xxd)（vim -b binary file or  *.o files etc.)
+"-----------------------------------------------------------
+" Tag jumping
+"-----------------------------------------------------------
+" Create the `tags` file (may need to install ctags first)
+command! MakeTags !ctags -R .
+
+"-----------------------------------------------------------
+" File editing
+"-----------------------------------------------------------
+set backspace=indent,eol,start
+set clipboard&
+set clipboard^=unnamed,autoselect
+
+"-----------------------------------------------------------
+" PlugIns via vim-plug
+"-----------------------------------------------------------
+call plug#begin('~/.vim/plugged')
+Plug 'Shougo/deoplete.nvim'
+Plug 'roxma/nvim-yarp'
+Plug 'roxma/vim-hug-neovim-rpc'
+let g:deoplete#enable_at_startup = 1
+
+Plug 'deoplete-plugins/deoplete-jedi'
+Plug 'Shougo/neco-vim'
+Plug 'jiangmiao/auto-pairs'
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
+Plug 'previm/previm'
+Plug 'dhruvasagar/vim-table-mode'
+Plug 'echuraev/translate-shell.vim'
+Plug 'yianwillis/vimcdoc'
+Plug 'simeji/winresizer'
+call plug#end()
+
+"-----------------------------------------------------------
+" Autocmd
+"-----------------------------------------------------------
+autocmd FileType c,php,javascript setlocal commentstring=//\ %s
+autocmd FileType apache,shell,py setlocal commentstring=#\ %s
+
+"-----------------------------------------------------------
+" Binary file editing
+"-----------------------------------------------------------
+" binary (xxd)（vim -b binary file or *.o files etc.)
 augroup Binary
   autocmd!
   autocmd BufReadPre  *.o,*.a,*.out let &binary = 1
@@ -272,15 +321,17 @@ augroup END
 let g:zip_unzipcmd = "unzip"
 let g:zip_zipcmd = "zip"
 
-" Ref:https://kazuph.hateblo.jp/entry/2016/04/29/211530
+"-----------------------------------------------------------
+" Previm (for markdown, plantuml etc.)
+"-----------------------------------------------------------
+" https://kazuph.hateblo.jp/entry/2016/04/29/211530
 let g:previm_open_cmd = 'open -a Safari'
-nnoremap <Leader>b :PrevimOpen<CR>
-" Ref:https://howpon.com/22203
+" https://howpon.com/22203
 let g:vim_markdown_folding_disabled = 1
 let g:previm_enable_realtime = 1
 
 " set runtimepath+=$HOME/.vim/mylib
-runtime! mylib/*.vim
+" runtime! mylib/*.vim
 
 " Set here avoiding reset
 set whichwrap=<,>
