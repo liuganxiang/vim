@@ -35,7 +35,8 @@ set modeline
 colorscheme murphy
 
 set cursorline
-set cursorcolumn
+hi CursorLine cterm=underline ctermfg=13 ctermbg=black
+"set cursorcolumn
 "hi CursorLine term=underline cterm=none ctermfg=15 ctermbg=DarkGray
 
 "-----------------------------------------------------------
@@ -54,9 +55,13 @@ nnoremap ZQ <Nop>
 nnoremap Q <Nop>
 
 nnoremap Y y$
+" for Japanese IME
+nnoremap ：ｗ :w<CR>
+nnoremap っｙｐ yyp
+nnoremap っｇ gg
+nnoremap G G
 
-" Save
-"nnoremap <Leader>s :w<CR>
+" <C-u> means delete chars before cursor
 
 nnoremap <ESC><ESC> :nohlsearch<CR>
 
@@ -94,6 +99,12 @@ nnoremap gr :tabprevious<CR>
 nnoremap <Leader>a ^
 " to $
 nnoremap <Leader>; $
+" コマンドモード時の操作方法
+" Ref:http://www.finenc.com/technology/tech_finenet/linux/vim/vim020.html
+" 空行を挿入する+α
+" Ref:http://deris.hatenablog.jp/entry/20130404/1365086716
+nnoremap o :<C-u>for i in range(1, v:count1) \| call append(line('.'), '') \| endfor<CR>j
+nnoremap O :<C-u>for i in range(1, v:count1) \| call append(line('.')-1, '') \| endfor<CR>k
 
 "-------------------
 " Move between windows
@@ -108,6 +119,17 @@ nnoremap <C-t>t <C-w>T
 nnoremap <C-j>j <C-w>J
 nnoremap <C-h>h <C-w>H
 nnoremap <C-l>l <C-w>L
+
+"-------------------
+" Bracket pairs
+inoremap "" ""<Left>
+inoremap '' ''<Left>
+inoremap """ """<CR><CR><Esc>i"""<Up>
+inoremap ``` ```<CR><CR><Esc>i```<Up>
+inoremap {} {}<Left>
+inoremap [] []<Left>
+inoremap <> <><Left>
+inoremap () ()<Left>
 
 " https://qiita.com/nakabonne/items/84d61ae5e89e20de0157
 " latest yank to paste
@@ -130,25 +152,8 @@ nnoremap <Leader>w :call ToggleNetrw()<CR>
 nnoremap <silent> <Leader>nn :setlocal relativenumber! number!<CR>
 
 " Toggle for cursorline and cursorcolumn
-nnoremap <Leader>cc :setlocal cursorline! cursorcolumn!<CR>
-
-"-----------------------------------------------------------
-" Indent
-"-----------------------------------------------------------
-" sw=shiftwidth, sts=softtabstop,ts=tabstop,et=expandtab
-autocmd FileType sh         setlocal sw=4 sts=4 ts=4 noet
-autocmd FileType go         setlocal sw=4 sts=4 ts=4 noet
-autocmd FileType php        setlocal sw=4 sts=4 ts=4 noet
-autocmd FileType xml        setlocal sw=4 sts=4 ts=4 noet
-autocmd FileType c,c++      setlocal sw=4 sts=4 ts=4 noet
-autocmd FileType java       setlocal sw=4 sts=4 ts=4 et
-autocmd FileType vim        setlocal sw=2 sts=2 ts=2 et
-autocmd FileType sql        setlocal sw=2 sts=2 ts=2 et
-autocmd FileType ruby       setlocal sw=2 sts=2 ts=2 et
-autocmd FileType yaml       setlocal sw=2 sts=2 ts=2 et
-autocmd FileType json       setlocal sw=2 sts=2 ts=2 et
-autocmd FileType python     setlocal sw=4 sts=4 ts=4 et
-autocmd FileType javascript setlocal sw=2 sts=2 ts=2 et
+nnoremap <Leader>cc :setlocal cursorcolumn!<CR>
+nnoremap <Leader>cl :setlocal cursorline!<CR>
 
 "-----------------------------------------------------------
 " Status line
@@ -286,7 +291,7 @@ let g:deoplete#enable_at_startup = 1
 
 Plug 'deoplete-plugins/deoplete-jedi'
 Plug 'Shougo/neco-vim'
-Plug 'jiangmiao/auto-pairs'
+" Plug 'jiangmiao/auto-pairs'
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 Plug 'previm/previm'
@@ -301,6 +306,21 @@ call plug#end()
 "-----------------------------------------------------------
 autocmd FileType c,php,javascript setlocal commentstring=//\ %s
 autocmd FileType apache,shell,py setlocal commentstring=#\ %s
+" sw=shiftwidth, sts=softtabstop,ts=tabstop,et=expandtab
+autocmd FileType sh         setlocal sw=4 sts=4 ts=4 noet
+autocmd FileType go         setlocal sw=4 sts=4 ts=4 noet
+autocmd FileType php        setlocal sw=4 sts=4 ts=4 noet
+autocmd FileType xml        setlocal sw=4 sts=4 ts=4 noet
+autocmd FileType c,c++      setlocal sw=4 sts=4 ts=4 noet
+autocmd FileType java       setlocal sw=4 sts=4 ts=4 et
+autocmd FileType vim        setlocal sw=2 sts=2 ts=2 et
+autocmd FileType sql        setlocal sw=2 sts=2 ts=2 et
+autocmd FileType ruby       setlocal sw=2 sts=2 ts=2 et
+autocmd FileType yaml       setlocal sw=2 sts=2 ts=2 et
+autocmd FileType json       setlocal sw=2 sts=2 ts=2 et
+autocmd FileType python     setlocal sw=4 sts=4 ts=4 et
+autocmd FileType markdown   setlocal sw=2 sts=2 ts=2 et
+autocmd FileType javascript setlocal sw=2 sts=2 ts=2 et
 
 "-----------------------------------------------------------
 " Binary file editing
