@@ -63,7 +63,9 @@ nnoremap G G
 
 " <C-u> means delete chars before cursor
 
-nnoremap <ESC><ESC> :nohlsearch<CR>
+nnoremap <ESC><ESC> :nohl<CR>
+inoremap <Leader><Tab> <Esc>^i<Tab><Esc>la<Space>
+inoremap <Leader>[ <Esc>:s/^\s*//<CR>:nohl<CR>a<Space>
 
 "-------------------
 " Folding
@@ -71,6 +73,7 @@ nnoremap <ESC><ESC> :nohlsearch<CR>
 set foldmethod=indent
 set foldlevel=3
 nnoremap fc zc
+
 nnoremap fo zo
 nnoremap fA zA
 nnoremap fm zm
